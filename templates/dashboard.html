@@ -24,7 +24,7 @@
           <a class="nav-link active" aria-current="page" href="#">Dashboard</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Settings</a>
+          <a class="nav-link" href="/register_new_customer">Register new Customer</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/logout">Logout</a>
@@ -74,6 +74,10 @@
   <thead>
     <tr>
       <th scope="col">Vehicles id</th>
+      <th scope="col">Registration No</th>
+      <th scope="col">Owner Name</th>
+      <th scope="col">Registration Valid till</th>
+      <th scope="col">Insurance Valid till</th>
       <th scope="col">Longitude</th>
       <th scope="col">Latitude</th>
       <th scope="col">Speed</th>
@@ -86,6 +90,10 @@
   {% for data in car_data %}
     <tr>
       <th scope="row">{{data.id}}</th>
+      <td>{{data.reg_number}}</td>
+      <td>{{data.owner_name}}</td>
+      <td>{{data.road_tax}}</td>
+      <td>{{data.insurance}}</td>
       <td>{{data.longitude}}</td>
       <td>{{data.latitude}}</td>
       <td>{{data.speed}} KMPH</td>
@@ -94,6 +102,7 @@
       <td><a href='enable/{{data.id}}' type="button" class="btn btn-outline-success">Enable</a>
         <a href='disable/{{data.id}}' type="button" class="btn btn-outline-danger">Disable</a>
         <a href='locate/{{data.id}}' type="button" class="btn btn-outline-dark">Locate</a>
+        <a href='delete/{{data.id}}' type="button" class="btn btn-outline-danger">Delete</a>
       </td>
     </tr>
   {% endfor %}
