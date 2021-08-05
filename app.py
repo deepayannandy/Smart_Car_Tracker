@@ -1,12 +1,15 @@
 from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+import pytz
+
 app= Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI']="sqlite:///VehiclesData.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 db=SQLAlchemy(app)
 
 islogin=0
+tz = pytz.timezone('Asia/Kolkata')
 
 class Vehicles(db.Model):
     id=db.Column(db.Integer,primary_key=True)
@@ -16,9 +19,9 @@ class Vehicles(db.Model):
     latitude = db.Column(db.String(20), nullable=False)
     speed = db.Column(db.Integer, nullable=False)
     status = db.Column(db.Boolean, nullable=False)
-    time= db.Column(db.DateTime, default=datetime.now())
-    road_tax = db.Column(db.String, default=datetime.now())
-    insurance = db.Column(db.String, default=datetime.now())
+    time= db.Column(db.DateTime, default=datetime.now(tz))
+    road_tax = db.Column(db.String, default=datetime.now(tz))
+    insurance = db.Column(db.String, default=datetime.now(tz))
     device_id=db.Column(db.String(10),nullable=False)
 
 
@@ -69,7 +72,7 @@ def update_data():
             data.longitude = request.args.get("longitude", "")
             data.latitude = request.args.get("latitude", "")
             data.speed = int(request.args.get("speed", ""))
-            data.time= datetime.now()
+            data.time= datetime.now(tz)
             db.session.add(data)
             db.session.commit()
             return "Updated!"
