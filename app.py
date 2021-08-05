@@ -19,6 +19,7 @@ class Vehicles(db.Model):
     time= db.Column(db.DateTime, default=datetime.now())
     road_tax = db.Column(db.String, default=datetime.now())
     insurance = db.Column(db.String, default=datetime.now())
+    device_id=db.Column(db.String(10),nullable=False)
 
 
     def __repr__(self) -> str:
@@ -47,25 +48,28 @@ def logout():
 
 @app.route("/dashboard")
 def dashboard():
-    all_data=Vehicles.query.all()
-    enable=0
-    for i in all_data:
-        if i.status==True:
-            enable+=1
-    return render_template('dashboard.html',car_no=len(all_data),disable=len(all_data)-enable,enable=enable,car_data=all_data)
-
+    if islogin==1:
+        all_data=Vehicles.query.all()
+        enable=0
+        for i in all_data:
+            if i.status==True:
+                enable+=1
+        return render_template('dashboard.html',car_no=len(all_data),disable=len(all_data)-enable,enable=enable,car_data=all_data)
+    else:
+        return redirect('/')
 @app.route("/update_data",methods=['GET','POST'])
 def update_data():
     if request.method == 'POST':
         try:
-            id=request.args.get("id", "")
+            id=request.args.get("deviceid", "")
             #car_data=Vehicles(longitude="23.402040",latitude="87.547729",speed=10,status=1)
             #db.session.add(car_data)
             #db.session.commit()
-            data = Vehicles.query.filter_by(id=id).first()
+            data = Vehicles.query.filter_by(device_id=id).first()
             data.longitude = request.args.get("longitude", "")
             data.latitude = request.args.get("latitude", "")
             data.speed = int(request.args.get("speed", ""))
+            data.time= datetime.now()
             db.session.add(data)
             db.session.commit()
             return "Updated!"
@@ -107,7 +111,7 @@ def ref_page():
         try:
             car_data = Vehicles(owner_name=request.form['name'], reg_number=request.form['regnumber'],
                                 road_tax=request.form['reg_date'], insurance=request.form['ins_date'],
-                                longitude="23.402040", latitude="87.547729", speed=0, status=1)
+                                longitude="23.402040", latitude="87.547729", speed=0, status=1,device_id=request.form['deviceId'])
             db.session.add(car_data)
             db.session.commit()
             return redirect('/dashboard')
@@ -116,5 +120,26 @@ def ref_page():
             return render_template('registration.html',message="Something Went Wrong!")
     else:
         return render_template('registration.html')
+@app.route("/findmycar",methods=['GET','POST'])
+def findmycar():
+    if request.method=='POST':
+        all_data = Vehicles.query.all()
+        for data in all_data:
+            if data.reg_number==request.form['regno'] and data.owner_name==request.form['username'] and data.device_id==request.form['deviceid']:
+                mycardata = Vehicles.query.filter_by(id=data.id).first()
+                return render_template('dataviewer.html',mycardata=mycardata)
+            else:
+                return render_template('findmycar.html',message="Data Mismatch!")
+    else:
+        return render_template('findmycar.html')
+@app.route("/getpermission/<string:did>")
+def getpermission(did):
+    print(did)
+    all_data = Vehicles.query.all()
+    for data in all_data:
+        if data.device_id ==did:
+            return str(data.status)
+    else:
+        return "Not Registered!"
 if __name__=="__main__":
     app.run(debug=True,host="0.0.0.0",port=6622)

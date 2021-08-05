@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title>Smart Car Tracking System</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <img src="static/logo.png" alt="" width="35" height="35" class="d-inline-block align-text-top" p>
+        Smart Car Tracking System
+    </a>
+  </div>
+</nav>
+    <div class="container my-5">
+      <h2>Find Your Car</h2>
+      <h3 style="color:red">{{message}}</h3>
+        <form action="/findmycar" method="POST">
+  <div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">Owners Name</label>
+    <input type="text" name="username" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+  </div>
+  <div class="mb-3">
+    <label for="exampleInputPassword1" class="form-label">Device Id</label>
+    <input type="password" name="deviceid" class="form-control" id="exampleInputPassword1">
+  </div>
+  <div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">Registration Number</label>
+    <input type="text" name="regno" class="form-control"  aria-describedby="emailHelp">
+  </div>
+  <button type="submit" class="btn btn-primary">Find</button>
+</form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  </body>
+</html>
